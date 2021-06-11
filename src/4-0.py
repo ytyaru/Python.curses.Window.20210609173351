@@ -2,7 +2,7 @@
 # coding: utf8
 import os, curses
 
-# curses.doupdate()を使う。window.refresh()でも行われるため、２つ以上のwindowがないと効果がない。２つの窓を用意してみた。
+# subwin()を重ねる（おなじ座標）と描画順に描かれる。use_default_colors()によりデフォルト色-1（透明）になっているため、明示していないところは透明色になっているようだ。
 class Main:
     def __init__(self, screen, msg, color_index=1):
         self.__screen = screen
