@@ -2,18 +2,14 @@
 # coding: utf8
 import os, curses
 
-# curses.doupdate()を使う。window.refresh()でも行われるため、２つ以上のwindowがないと効果がない。２つの窓を用意してみた。
+# subwin()は自動的にoverlay()されるようだ。
 class Main:
     def __init__(self, screen, msg, color_index=1):
         self.__screen = screen
         self.__msg = msg
         self.__color_index = color_index
-#        self.__win = curses.newwin(curses.LINES, curses.COLS)
-#        self.__win = screen.subwin(curses.LINES, curses.COLS)
-#        self.__win = screen.subwin(curses.LINES-1, curses.COLS-1)
-#        self.__win = screen.subwin(curses.LINES-1, curses.COLS-1, 0, 0)
-        self.__win1 = screen.subwin(curses.LINES, curses.COLS, 0, 0)
-        self.__win2 = screen.subwin(curses.LINES, curses.COLS, 0, 0)
+        self.__sub1 = screen.subwin(curses.LINES, curses.COLS, 0, 0)
+        self.__sub2 = screen.subwin(curses.LINES, curses.COLS, 0, 0)
         self.__init_cursor()
         self.__init_color_pair()
         self.__draw()
@@ -27,16 +23,12 @@ class Main:
             curses.init_pair(i, i, curses.COLOR_BLACK)
     def __draw(self):
         try:
-            self.__win1.noutrefresh()
-            self.__win2.noutrefresh()
+            self.__sub1.noutrefresh()
+            self.__sub2.noutrefresh()
             for i in range(1, curses.COLORS):
-#                self.__screen.addstr(str(i).rjust(3), curses.A_REVERSE | curses.color_pair(i))
-                self.__win1.addstr(str(i).rjust(3), curses.A_REVERSE | curses.color_pair(i))
+                self.__sub1.addstr(str(i).rjust(3), curses.A_REVERSE | curses.color_pair(i))
         except curses.ERR: pass
-#        self.__screen.addstr(7, 0, self.__msg, curses.A_REVERSE | curses.color_pair(self.__color_index))
-        self.__win2.addstr(7, 0, self.__msg, curses.A_REVERSE | curses.color_pair(self.__color_index))
-#        if self.__win1.is_wintouched: self.__win1.refresh()
-#        if self.__win2.is_wintouched: self.__win2.refresh()
+        self.__sub2.addstr(7, 0, self.__msg, curses.A_REVERSE | curses.color_pair(self.__color_index))
         curses.doupdate()
     def __input(self):
         self.__screen.getkey()
