@@ -2,7 +2,7 @@
 # coding: utf8
 import os, curses
 
-# curses.subwin()を使う。なぜか引数を4つ指定しないとエラーになったり何も表示されなくなる。
+# stdscr.subwin()を使う。
 class Main:
     def __init__(self, screen, msg, color_index=1):
         self.__screen = screen
